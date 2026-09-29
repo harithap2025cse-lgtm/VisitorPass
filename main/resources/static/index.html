@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VisitorPass</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">VP</div>
+
+            <div>
+                <h1>VisitorPass</h1>
+                <span>Community Management</span>
+            </div>
+        </div>
+
+        <nav>
+            <button class="nav-item active" data-section="dashboard">
+                Dashboard
+            </button>
+
+            <button class="nav-item" data-section="flats">
+                Flats
+            </button>
+
+            <button class="nav-item" data-section="residents">
+                Residents
+            </button>
+
+            <button class="nav-item" data-section="approvals">
+                Visitor Approvals
+            </button>
+
+            <button class="nav-item" data-section="gate">
+                Gate Entry
+            </button>
+        </nav>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h2 id="pageTitle">Dashboard</h2>
+                <p>Gated community visitor management</p>
+            </div>
+
+            <button class="refresh-btn" onclick="loadData()">
+                Refresh
+            </button>
+
+        </header>
+
+        <div id="message" class="message hidden"></div>
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="section active-section">
+
+            <div class="stats">
+
+                <div class="stat-card">
+                    <span>Total Flats</span>
+                    <strong id="totalFlats">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Total Residents</span>
+                    <strong id="totalResidents">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Pending Approvals</span>
+                    <strong id="pendingApprovals">0</strong>
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h3>Recent Visitor Approvals</h3>
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>Visitor</th>
+                            <th>Purpose</th>
+                            <th>Visit Time</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="dashboardApprovals"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FLATS -->
+
+        <section id="flats" class="section">
+
+            <div class="two-column">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h3>Add Flat</h3>
+                    </div>
+
+                    <form id="flatForm">
+
+                        <label>
+                            Flat Number
+                            <input
+                                id="flatNumber"
+                                required
+                                placeholder="A-101">
+                        </label>
+
+                        <label>
+                            Block
+                            <input
+                                id="flatBlock"
+                                required
+                                placeholder="A">
+                        </label>
+
+                        <label>
+                            Floor
+                            <input
+                                id="flatFloor"
+                                type="number"
+                                min="1"
+                                required
+                                placeholder="1">
+                        </label>
+
+                        <button class="primary-btn" type="submit">
+                            Add Flat
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h3>Flats</h3>
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Flat</th>
+                                <th>Block</th>
+                                <th>Floor</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="flatsTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- RESIDENTS -->
+
+        <section id="residents" class="section">
+
+            <div class="two-column">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h3>Add Resident</h3>
+                    </div>
+
+                    <form id="residentForm">
+
+                        <label>
+                            Name
+                            <input
+                                id="residentName"
+                                required
+                                placeholder="Haritha">
+                        </label>
+
+                        <label>
+                            Phone
+                            <input
+                                id="residentPhone"
+                                required
+                                maxlength="10"
+                                pattern="[0-9]{10}"
+                                placeholder="9876543210">
+                        </label>
+
+                        <label>
+                            Email
+                            <input
+                                id="residentEmail"
+                                type="email"
+                                required
+                                placeholder="haritha@example.com">
+                        </label>
+
+                        <label>
+                            Flat
+                            <select id="residentFlat" required></select>
+                        </label>
+
+                        <button class="primary-btn" type="submit">
+                            Add Resident
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <h3>Residents</h3>
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Flat</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="residentsTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- APPROVALS -->
+
+        <section id="approvals" class="section">
+
+            <div class="panel form-panel">
+
+                <div class="panel-header">
+                    <h3>Create Visitor Approval</h3>
+                </div>
+
+                <form id="approvalForm" class="approval-form">
+
+                    <label>
+                        Resident
+                        <select id="approvalResident" required></select>
+                    </label>
+
+                    <label>
+                        Visitor Name
+                        <input
+                            id="visitorName"
+                            required
+                            placeholder="Arun Kumar">
+                    </label>
+
+                    <label>
+                        Visitor Phone
+                        <input
+                            id="visitorPhone"
+                            required
+                            maxlength="10"
+                            pattern="[0-9]{10}"
+                            placeholder="9876501234">
+                    </label>
+
+                    <label>
+                        Visit Date & Time
+                        <input
+                            id="visitDateTime"
+                            type="datetime-local"
+                            required>
+                    </label>
+
+                    <label>
+                        Expected Exit
+                        <input
+                            id="expectedExitTime"
+                            type="datetime-local"
+                            required>
+                    </label>
+
+                    <label class="full-width">
+                        Purpose
+                        <input
+                            id="purpose"
+                            required
+                            placeholder="Personal Visit">
+                    </label>
+
+                    <button class="primary-btn full-width" type="submit">
+                        Create Approval
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header approval-list-header">
+
+                    <h3>Visitor Approvals</h3>
+
+                </div>
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>Visitor</th>
+                            <th>Resident</th>
+                            <th>Visit Time</th>
+                            <th>Entry Time</th>
+                            <th>Purpose</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="approvalsTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- GATE -->
+
+        <section id="gate" class="section">
+
+            <div class="gate-box">
+
+                <div class="gate-icon">✓</div>
+
+                <h3>Gate Entry Validation</h3>
+
+                <p>
+                    Enter the visitor's 6-digit OTP to validate entry.
+                </p>
+
+                <form id="otpForm">
+
+                    <input
+                        id="otpInput"
+                        class="otp-input"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        inputmode="numeric"
+                        placeholder="000000"
+                        required>
+
+                    <button class="primary-btn" type="submit">
+                        Validate Entry
+                    </button>
+
+                </form>
+
+                <div id="entryResult" class="entry-result hidden"></div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
